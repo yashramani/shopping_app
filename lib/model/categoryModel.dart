@@ -5,9 +5,8 @@ class CategoryModel{
   late final String name;
   late final String image;
   CategoryModel({required this.name,required this.image});
-
-
 }
+
 List<CategoryModel> categoryData = [
   CategoryModel(name: 'Men', image: 'assets/icons/mensshoe.png'),
   CategoryModel(name: 'Women', image: 'assets/icons/shows.png'),

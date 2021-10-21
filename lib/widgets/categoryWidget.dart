@@ -1,3 +1,6 @@
+// ignore: file_names
+// ignore_for_file: file_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,10 +17,12 @@ class CategoryWidget extends StatefulWidget {
 class _CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
       Container(
-        height: 150.h,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height / 5,
+        width: double.infinity,
         child: Column(
           children: [
             HeaderText(

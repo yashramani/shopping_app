@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +12,9 @@ void main() {
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.black, // navigation bar color
-    statusBarColor: Colors.white, // status bar color
+    statusBarColor: Colors.white,
+    statusBarBrightness: Brightness.light
+    // status bar color
   ));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
