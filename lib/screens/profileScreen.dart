@@ -13,6 +13,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -69,28 +70,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 physics: NeverScrollableScrollPhysics(),
                   itemCount: profileData.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding:  EdgeInsets.only(bottom: 10.h),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 50.h,
-                            width: 50.w,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Image.asset(profileData[index].imagename),
+                    return GestureDetector(
+                      child: Padding(
+                        padding:  EdgeInsets.only(bottom: 10.h),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 50.h,
+                              width: 50.w,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Image.asset(profileData[index].imagename),
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFEEEEEE),
+                                  borderRadius: BorderRadius.circular(10.0)),
                             ),
-                            decoration: BoxDecoration(
-                                color: Color(0xFFEEEEEE),
-                                borderRadius: BorderRadius.circular(10.0)),
-                          ),
-                          SizedBox(width: 10.w,),
-                          Text(profileData[index].name,style: TextStyle(fontSize: 24.sp,fontFamily: 'SF Pro Display'),),
-                          Spacer(),
-                          //Image.asset('assets/profileicon/arrow.png',height: 30.h,width: 30.w,)
-                          Icon(Icons.arrow_forward_ios_outlined)
-                        ],
+                            SizedBox(width: 10.w,),
+                            Text(profileData[index].name,style: TextStyle(fontSize: 24.sp,fontFamily: 'SF Pro Display'),),
+                            Spacer(),
+                            //Image.asset('assets/profileicon/arrow.png',height: 30.h,width: 30.w,)
+                            Icon(Icons.arrow_forward_ios_outlined)
+                          ],
+                        ),
                       ),
+                      onTap: (){
+                        setState(() {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(profileData[index].name),));
+                        });
+                      },
                     );
                   }),
             ),

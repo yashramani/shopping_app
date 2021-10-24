@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "683809417764",
+    "project_id": "tradding-cart",
+    "storage_bucket": "tradding-cart.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683809417764:android:979e1ae23d7604056fc6b1",
+        "android_client_info": {
+          "package_name": "com.example.shopping_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683809417764-892494ubgike1ncov88amfp69rhruaq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8zgXYqhMlqmtiwXHDtRIOIW06lXOGfK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683809417764-892494ubgike1ncov88amfp69rhruaq7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
