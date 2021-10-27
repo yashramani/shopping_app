@@ -3,7 +3,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_app/auth/Authentication.dart';
 import 'package:shopping_app/model/profilemodel.dart';
+import 'package:shopping_app/widgets/loader.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -13,7 +17,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  
+
+  Authentication auth = Authentication();
+  signOut() async {
+    SharedPreferences pref  = await SharedPreferences.getInstance();
+    await auth.googleLogOut().then((value) {
+      pref.clear();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Loging Out'),
+      ));
+      isLoading(context, false);
+      Get.toNamed('/loginPage');
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,14 +81,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Container(
               //width: double.maxFinite,
               padding: EdgeInsets.all(15.h),
-             // height: MediaQuery.of(context).size.height / 1.5,
+              // height: MediaQuery.of(context).size.height / 1.5,
               child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: profileData.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       child: Padding(
-                        padding:  EdgeInsets.only(bottom: 10.h),
+                        padding: EdgeInsets.only(bottom: 10.h),
                         child: Row(
                           children: [
                             Container(
@@ -80,23 +96,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: 50.w,
                               child: Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Image.asset(profileData[index].imagename),
+                                child:
+                                    Image.asset(profileData[index].imagename),
                               ),
                               decoration: BoxDecoration(
                                   color: Color(0xFFEEEEEE),
                                   borderRadius: BorderRadius.circular(10.0)),
                             ),
-                            SizedBox(width: 10.w,),
-                            Text(profileData[index].name,style: TextStyle(fontSize: 24.sp,fontFamily: 'SF Pro Display'),),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              profileData[index].name,
+                              style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontFamily: 'SF Pro Display'),
+                            ),
                             Spacer(),
-                            //Image.asset('assets/profileicon/arrow.png',height: 30.h,width: 30.w,)
                             Icon(Icons.arrow_forward_ios_outlined)
                           ],
                         ),
                       ),
-                      onTap: (){
+                      onTap: () {
                         setState(() {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(profileData[index].name),));
+                          if (profileData[index].name == 'Log Out') {
+                            isLoading(context, true);
+                            signOut();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(profileData[index].name),
+                            ));
+                          }
                         });
                       },
                     );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_app/constant/Constant.dart';
 import 'package:shopping_app/routes.dart';
-import 'package:shopping_app/screens/homepage.dart';
 import 'package:shopping_app/screens/loginScreen.dart';
 
 class TraddingCart extends StatefulWidget {
@@ -18,15 +18,16 @@ class _TraddingCartState extends State<TraddingCart> {
 
   void initState() {
     super.initState();
-    _checkLogin();
+    setState(() {
+      _checkLogin();
+    });
   }
 
-  String id = "";
   _checkLogin() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    id = preferences.getString('emailID')!;
-    print('*-*-*-*--*-*-*-*-**-*-**-*-**-* $id');
-    if(id != null && id != "") {
+    appConstData.usergglID = preferences.getString('emailID')!;
+    print('CheckLogin ------------------------ ${appConstData.usergglID} ');
+    if(appConstData.usergglID != null && appConstData.usergglID != "") {
       Get.toNamed('/homePage');
     }
     else{

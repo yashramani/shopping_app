@@ -3,19 +3,38 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopping_app/constant/functions.dart';
 import 'package:shopping_app/screens/cartPage.dart';
+import 'package:shopping_app/constant/Constant.dart';
 import 'package:shopping_app/screens/exploreScreen.dart';
 import 'package:shopping_app/screens/profileScreen.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
 
+  const Homepage({Key? key}) : super(key: key);
   @override
   _HomepageState createState() => _HomepageState();
+
 }
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0;
+Functions fun = Functions();
+
+@override
+  void initState()  {
+    super.initState();
+    setState(() {
+      getData();
+    });
+  }
+
+  getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    appConstData.usergglID = preferences.getString('emailID')!;
+    print('Homepage ----------------- ${appConstData.usergglID}');
+  }
 
   // ignore: prefer_final_fields
   List<Widget> _widgetOptions = <Widget>[

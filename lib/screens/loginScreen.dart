@@ -21,6 +21,35 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Authentication auth = Authentication();
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  Authentication authentication = Authentication();
+
+  googleSignIn(){
+    auth.googleSign(context).then((value) {
+      isLoading(context, false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Login SuccessFully'),
+      ));
+      Get.toNamed('/homePage');
+    });
+  }
+  void SaveData() {
+    if (_formKey.currentState!.validate()) {
+      isLoading(context, true);
+
+      authentication
+          .signInUser(
+              email: emailController.text, password: passwordController.text)
+          .then((value) {
+        authentication.verifyEmail(context);
+        emailController.clear();
+        passwordController.clear();
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,80 +69,94 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 100.h,
               ),
               containerWidget(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.w, vertical: 15.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Welcome,',
-                            style: TextStyle(
-                              fontSize: 30.sp,
-                              color: const Color(0xff000000),
-                              fontWeight: FontWeight.w700,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Welcome,',
+                                style: TextStyle(
+                                  fontSize: 30.sp,
+                                  color: const Color(0xff000000),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.toNamed('/signupPage');
+                                },
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: const Color(0xff00c569),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           Text(
-                            'Sign Up',
+                            'Sign in to Continue',
                             style: TextStyle(
-                              fontSize: 18.sp,
-                              color: const Color(0xff00c569),
+                              fontSize: 14.sp,
+                              color: const Color(0xff929292),
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          textFormFeild(
+                            controller: emailController,
+                            labeltxt: 'Email',
+                            hinttxt: 'Enter Email',
+                            obstxt: false,
+                            error: 'Email Required',
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          textFormFeild(
+                            controller: passwordController,
+                            obstxt: true,
+                            hinttxt: 'Enter Password',
+                            labeltxt: 'Password',
+                            error: 'Password Required',
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: const Color(0xff000000),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40.h,
+                          ),
+                          buildButton(() {
+                            setState(() {
+                              SaveData();
+                            });
+                            //Get.toNamed('/signupPage');
+                          }, 'SIGN IN', Colors.green, double.maxFinite)
                         ],
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        'Sign in to Continue',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: const Color(0xff929292),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      const textFormFeild(
-                        labeltxt: 'Name',
-                        hinttxt: 'Enter Name',
-                        obstxt: false,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      const textFormFeild(
-                        obstxt: true,
-                        hinttxt: 'Enter Password',
-                        labeltxt: 'Password',
-                      ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: const Color(0xff000000),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      buildButton(() {
-                        Get.toNamed('/signupPage');
-                      }, 'SIGN IN', Colors.green, double.maxFinite)
-                    ],
-                  ),
-                ),
+                    )),
               ),
               SizedBox(
                 height: 20.h,
@@ -138,12 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AuthenticateButton(() {
                 isLoading(context, true);
                 setState(() {
-                  auth.googleSign(context).then((value) {
-                    isLoading(context, false);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login SuccessFully'),));
-                    Get.toNamed('/homePage');
-
-                  });
+                  googleSignIn();
                 });
               }, 'assets/images/icons8_Google_2.png', 'Sign In with Google')
             ],
