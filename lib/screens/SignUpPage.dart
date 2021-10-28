@@ -28,17 +28,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void saveData() {
     if (_formKey.currentState!.validate()) {
-      auth.createEmailUser(
-          email: emailController.text, password: passwordController.text).then((
+      auth.createEmailUser(context: context,email: emailController.text, password: passwordController.text).then((
           value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('User Created Successfully'),));
         nameController.clear();
         emailController.clear();
         passwordController.clear();
-        isLoading(context,false);
-        Get.toNamed('/loginPage');
-
       });
     }
   }

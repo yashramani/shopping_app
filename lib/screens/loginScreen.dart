@@ -38,14 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void SaveData() {
     if (_formKey.currentState!.validate()) {
       isLoading(context, true);
-
       authentication
-          .signInUser(
-              email: emailController.text, password: passwordController.text)
+          .signInUser(context: context,email: emailController.text, password: passwordController.text)
           .then((value) {
         authentication.verifyEmail(context);
         emailController.clear();
         passwordController.clear();
+        isLoading(context, false);
       });
     }
 

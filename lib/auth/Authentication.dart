@@ -15,9 +15,7 @@ class Authentication {
   late GoogleSignInAccount data;
   late final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late User useremail;
-
   GoogleSignInAccount get user => data;
-
   Future googleSign(BuildContext context) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
@@ -30,7 +28,7 @@ class Authentication {
       appConstData.usergglID = data.email;
       print('------------------------- ${appConstData.usergglID}');
       sharedPreferences.setString('emailID', data.email);
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       print("-----------------------------------$e");
     }
@@ -41,32 +39,62 @@ class Authentication {
     return 'Sign Out';
   }
 
-  Future createEmailUser({required String email,required String password}) async {
-      await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      return 'User Create';
+  Future createEmailUser(
+      {context, required String email, required String password}) async {
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      isLoading(context, false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('User Created SuccessFully'),
+      ));
+      isLoading(context, false);
+      Get.toNamed('/loginPage');
+      return 'User Created SuccessFully';
+    } on FirebaseAuthException catch (e) {
+      isLoading(context, false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.message.toString()),
+      ));
+      print(e);
+    }
   }
 
-  Future signInUser({required String email,required String password}) async {
-    await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    return 'Sign In';
+  Future signInUser(
+      {context, required String email, required String password}) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      isLoading(context, false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('User Login SuccessFully'),
+      ));
+      Get.toNamed('/homePage');
+      return 'Sign In';
+    } on FirebaseAuthException catch (e) {
+      isLoading(context, false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.message.toString()),
+      ));
+      print(e);
+    }
   }
 
   Future verifyEmail(BuildContext context) async {
-    useremail = _firebaseAuth.currentUser!;
-    await useremail.reload();
-    useremail.sendEmailVerification();
-
-    if(useremail.emailVerified){
-      isLoading(context, false);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('User Login SuccessFully'),
-      ));
-    }else{
-      isLoading(context, false);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Invalid User Details'),
+    try {
+      useremail = _firebaseAuth.currentUser!;
+      await useremail.reload();
+      useremail.sendEmailVerification();
+      if (useremail.emailVerified == true) {
+        isLoading(context, false);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('User Login SuccessFully'),
+        ));
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.message.toString()),
       ));
     }
   }
 }
-
